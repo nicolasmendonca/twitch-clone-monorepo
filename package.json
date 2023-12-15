@@ -1,0 +1,12 @@
+{
+  "name": "twendo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "webapp:dev": "pnpm -F @twendo/webapp dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
