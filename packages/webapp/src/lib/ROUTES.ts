@@ -9,9 +9,10 @@
  * PAGES
  */
 const PAGES = {
-  "/": `/`,
   "/login": `/login`,
-  "/register": `/register`
+  "/register": `/register`,
+  "/": `/`,
+  "/search": `/search`
 }
 
 /**
@@ -111,7 +112,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = { 
-  PAGES: { '/': never, '/login': never, '/register': never }
+  PAGES: { '/login': never, '/register': never, '/': never, '/search': never }
   SERVERS: { 'POST /api/webhooks/clerk': never }
   ACTIONS: Record<string, never>
   LINKS: Record<string, never>

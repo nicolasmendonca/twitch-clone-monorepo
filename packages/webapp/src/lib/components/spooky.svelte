@@ -14,6 +14,7 @@
 	height="2048.00"
 	viewBox="0 0 2048.0 2048.0"
 	class={className}
+	aria-label="Gamehub"
 >
 	<g id="document" transform="matrix(1,0,0,1,1024.0,1024.0)">
 		<path
