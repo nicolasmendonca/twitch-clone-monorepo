@@ -18,7 +18,7 @@ const PAGES = {
  * SERVERS
  */
 const SERVERS = {
-  
+  "POST /api/webhooks/clerk": `/api/webhooks/clerk`
 }
 
 /**
@@ -112,7 +112,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 */
 export type KIT_ROUTES = { 
   PAGES: { '/': never, '/login': never, '/register': never }
-  SERVERS: Record<string, never>
+  SERVERS: { 'POST /api/webhooks/clerk': never }
   ACTIONS: Record<string, never>
   LINKS: Record<string, never>
   Params: Record<string, never>
