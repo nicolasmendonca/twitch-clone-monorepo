@@ -27,6 +27,6 @@
 			</div>
 			<div class="hidden lg:block">Dashboard</div>
 		</Button.Root>
-		<UserButton afterSignOutUrl={route('/browse')} />
+		<UserButton afterSignOutUrl={route('/')} />
 	</div>
 </SignedIn>
