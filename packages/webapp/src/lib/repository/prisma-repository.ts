@@ -73,6 +73,24 @@ export class PrismaRepository implements RepositoryService {
 			}
 		});
 	};
+
+	isFollowingUser: RepositoryService['isFollowingUser'] = async (
+		externalUserId: User['externalUserId'],
+		userId: string
+	) => {
+		const currentUser = await this.prisma.follow.findFirst({
+			where: {
+				follower: {
+					externalUserId
+				},
+				following: {
+					id: userId
+				}
+			}
+		});
+
+		return !!currentUser;
+	};
 }
 
 export const prismaRepository = new PrismaRepository();

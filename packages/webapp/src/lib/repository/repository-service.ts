@@ -8,4 +8,7 @@ export interface RepositoryService {
 	getRecommendedChannels(
 		externalUserId: User['externalUserId']
 	): Promise<Pick<User, 'id' | 'imageUrl' | 'username'>[]>;
+
+	// Follow
+	isFollowingUser(externalUserId: User['externalUserId'], channelId: string): Promise<boolean>;
 }
