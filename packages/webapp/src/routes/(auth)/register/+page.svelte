@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { dark } from '@clerk/themes';
 	import SignUp from 'clerk-sveltekit/client/SignUp.svelte';
-	import Spooky from '$lib/components/spooky.svelte';
+	import { route } from '$lib/ROUTES';
 </script>
 
 <div class="flex flex-col gap-8 items-center h-screen pt-24">
-	<Spooky fill="white" class="w-48 h-48" />
+	<img src="/spooky.svg" alt="" class="w-48 h-48 bg-white rounded-full fill-black" />
 	<SignUp
-		redirectUrl="/"
+		redirectUrl={route('/browse')}
 		appearance={{
 			baseTheme: dark
 		}}

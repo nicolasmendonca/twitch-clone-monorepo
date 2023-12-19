@@ -2,7 +2,7 @@ import { env } from '$env/dynamic/private';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { WebhookEvent } from '@clerk/nextjs/server';
 import { Webhook } from 'svix';
-import { prisma } from '../../../../lib/db';
+import { prismaRepository } from '$lib/db';
 
 export const POST: RequestHandler = async ({ request }) => {
 	if (request.method !== 'POST') {
@@ -48,54 +48,30 @@ export const POST: RequestHandler = async ({ request }) => {
 		console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
 		console.log('Webhook body:', body);
 
-		if (eventType === 'user.created') {
-			await prisma.user.create({
-				data: {
-					externalUserId: payload.data.id,
-					username: payload.data.username,
-					imageUrl: payload.data.image_url
-				}
-			});
-		}
-
-		if (eventType === 'user.updated') {
-			const currentUser = await prisma.user.findUnique({
-				where: {
-					externalUserId: payload.data.id
-				}
-			});
-
-			if (!currentUser) {
-				throw new Error(`User with externalUserId ${payload.data.id} does not exist`);
-			}
-
-			await prisma.user.update({
-				where: {
-					externalUserId: payload.data.id
-				},
-				data: {
-					username: payload.data.username,
-					imageUrl: payload.data.image_url
-				}
-			});
-		}
-
-		if (eventType === 'user.deleted') {
-			const currentUser = await prisma.user.findUnique({
-				where: {
-					externalUserId: payload.data.id
-				}
-			});
-
-			if (!currentUser) {
-				throw new Error(`User with externalUserId ${payload.data.id} does not exist`);
-			}
-
-			await prisma.user.delete({
-				where: {
-					externalUserId: payload.data.id
-				}
-			});
+		switch (eventType) {
+			case 'user.created':
+				console.log('User created');
+				await prismaRepository.createUser({
+					externalUserId: evt.data.id,
+					imageUrl: evt.data.image_url,
+					username: evt.data.username!
+				});
+				break;
+			case 'user.updated':
+				await prismaRepository.updateUser({
+					externalUserId: evt.data.id,
+					imageUrl: evt.data.image_url,
+					username: evt.data.username!
+				});
+				break;
+			case 'user.deleted':
+				console.log('User deleted');
+				await prismaRepository.deleteUser({
+					externalUserId: evt.data.id!
+				});
+				break;
+			default:
+				console.log(`Unhandled event "${eventType}"`);
 		}
 
 		return new Response('', { status: 200 });

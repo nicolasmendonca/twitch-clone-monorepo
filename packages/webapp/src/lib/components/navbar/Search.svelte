@@ -6,27 +6,20 @@
 </script>
 
 <form
-	class="relative w-full md:w-[400px] flex items-center bg-muted"
+	class="relative w-full md:w-[400px] flex items-center bg-background rounded-md border border-background focus-within:border"
 	method="GET"
 	action="/search"
 	on:submit|preventDefault={async (event) => {
 		const formData = new FormData(event.currentTarget);
-
 		const query = formData.get('query')?.toString() ?? '';
-
 		const searchParams = new URLSearchParams([['query', query]]);
-		goto(`/search?${searchParams.toString()}`, {
+		event.currentTarget.reset();
+		await goto(`/search?${searchParams.toString()}`, {
 			invalidateAll: true
 		});
-		event.currentTarget.reset();
 	}}
 >
-	<Input
-		type="search"
-		placeholder="Search"
-		name="query"
-		class="rounded-r-none border-2 focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 focus-visible:border-white"
-	/>
+	<Input type="search" placeholder="Search" name="query" class="rounded-r-none" />
 	<Button size="sm" variant="secondary" class="rounded-l-none" type="submit">
 		<SearchIcon color="#A3A3A3" class="h-5 w-5 text-muted-foreground" />
 	</Button>
