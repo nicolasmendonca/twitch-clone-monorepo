@@ -2,7 +2,7 @@ import { env } from '$env/dynamic/private';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { WebhookEvent } from '@clerk/nextjs/server';
 import { Webhook } from 'svix';
-import { prismaRepository } from '$lib/db';
+import { prismaRepository } from '$lib/repository/prisma-repository';
 
 export const POST: RequestHandler = async ({ request }) => {
 	if (request.method !== 'POST') {
@@ -40,17 +40,13 @@ export const POST: RequestHandler = async ({ request }) => {
 			'svix-timestamp': svix_timestamp,
 			'svix-signature': svix_signature
 		}) as WebhookEvent;
+		console.log('🚀 ~ file: +server.ts:43 ~ constPOST:RequestHandler= ~ evt:', evt);
 
 		// Get the ID and type
-		const { id } = evt.data;
 		const eventType = evt.type;
-
-		console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-		console.log('Webhook body:', body);
 
 		switch (eventType) {
 			case 'user.created':
-				console.log('User created');
 				await prismaRepository.createUser({
 					externalUserId: evt.data.id,
 					imageUrl: evt.data.image_url,
@@ -65,7 +61,6 @@ export const POST: RequestHandler = async ({ request }) => {
 				});
 				break;
 			case 'user.deleted':
-				console.log('User deleted');
 				await prismaRepository.deleteUser({
 					externalUserId: evt.data.id!
 				});

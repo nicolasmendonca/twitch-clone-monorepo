@@ -8,7 +8,7 @@ import { route } from './lib/ROUTES';
 export const handle: Handle = sequence(
 	handleClerk(CLERK_SECRET_KEY, {
 		debug: env.NODE_ENV === 'development',
-		protectedPaths: [route('/browse')],
+		protectedPaths: [],
 		signInUrl: '/login'
 	})
 );

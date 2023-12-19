@@ -22,7 +22,6 @@
 
 	type Size = VariantProps<typeof avatarVariants>['size'];
 
-	// export let username: User['username'];
 	export let imageUrl: User['imageUrl'];
 	export let size: Size = defaultSize;
 	export let isLive: boolean = false;

@@ -5,6 +5,7 @@
 	import SignedOut from 'clerk-sveltekit/client/SignedOut.svelte';
 	import UserButton from 'clerk-sveltekit/client/UserButton.svelte';
 	import { Clapperboard } from 'lucide-svelte';
+	import { route } from '$lib/ROUTES';
 </script>
 
 <SignedOut>
@@ -26,6 +27,6 @@
 			</div>
 			<div class="hidden lg:block">Dashboard</div>
 		</Button.Root>
-		<UserButton afterSignOutUrl="/" />
+		<UserButton afterSignOutUrl={route('/browse')} />
 	</div>
 </SignedIn>

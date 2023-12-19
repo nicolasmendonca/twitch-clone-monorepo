@@ -55,7 +55,7 @@
 								'justify-center': !$sidebarStore.expanded
 							})}
 						>
-							<UserAvatar imageUrl={channel.imageUrl} username={channel.username} {isLive} />
+							<UserAvatar imageUrl={channel.imageUrl} {isLive} />
 							{#if $sidebarStore.expanded}
 								<p class="truncate">{channel.username}</p>
 								{#if isLive}
