@@ -40,7 +40,7 @@
 				{@const isLive = true}
 				<li>
 					<a
-						href={route('/browse/u/[username]', { username: channel.username })}
+						href={route('/u/[username]', { username: channel.username })}
 						class={Button.buttonVariants({
 							variant: 'ghost',
 							className: cn('w-full h-12', {
