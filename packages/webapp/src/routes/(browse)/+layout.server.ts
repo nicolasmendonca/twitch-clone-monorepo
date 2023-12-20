@@ -11,6 +11,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		: Promise.resolve([]);
 
 	return {
+		authUser: await locals.repository.getAuthUser(),
 		recommendedChannels
 	};
 };
