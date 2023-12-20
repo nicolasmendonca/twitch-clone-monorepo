@@ -1,4 +1,3 @@
-import { prismaRepository } from '$lib/repository/prisma-repository';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ locals }) => {
@@ -8,7 +7,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 	);
 
 	const recommendedChannels = locals.session?.userId
-		? prismaRepository.getRecommendedChannels(locals.session.userId)
+		? locals.repository.getRecommendedUsers()
 		: Promise.resolve([]);
 
 	return {

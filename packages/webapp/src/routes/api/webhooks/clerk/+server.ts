@@ -2,7 +2,9 @@ import { env } from '$env/dynamic/private';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { WebhookEvent } from '@clerk/nextjs/server';
 import { Webhook } from 'svix';
-import { prismaRepository } from '$lib/repository/prisma-repository';
+import { PrismaRepository } from '$lib/repository/prisma-repository';
+
+const prismaRepository = new PrismaRepository(undefined);
 
 export const POST: RequestHandler = async ({ request }) => {
 	if (request.method !== 'POST') {

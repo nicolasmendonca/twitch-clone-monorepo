@@ -6,15 +6,16 @@
 	import * as Button from '$lib/components/ui/button';
 	import { route } from '$lib/ROUTES';
 	import { UserAvatar } from '$lib/components/user-avatar';
+	import type { RepositoryService } from '$lib/repository/repository-service';
 	import LiveBadge from '$lib/components/LiveBadge.svelte';
-	import type { LayoutData } from '../$types';
 
-	export let data: LayoutData;
+	let recommendedChannelsPromise: ReturnType<RepositoryService['getRecommendedUsers']> =
+		$page.data.recommendedChannels;
 </script>
 
 <div>
 	{#if $sidebarStore.expanded}
-		{#await data.recommendedChannels then channels}
+		{#await recommendedChannelsPromise then channels}
 			{#if channels.length > 0}
 				<div class="pl-6 mb-4 hidden lg:block">
 					<p class="text-sm text-muted-foreground">Recommended</p>
@@ -23,7 +24,7 @@
 		{/await}
 	{/if}
 	<ul class="space-y-2 px-2">
-		{#await data.recommendedChannels}
+		{#await recommendedChannelsPromise}
 			<!-- <Skeleton> Component -->
 			<div class="space-y-4 px-2">
 				{#each Array(4) as i}

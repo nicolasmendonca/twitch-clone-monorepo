@@ -5,10 +5,11 @@ export interface RepositoryService {
 	createUser(payload: Pick<User, 'externalUserId' | 'username' | 'imageUrl'>): Promise<void>;
 	updateUser(payload: Pick<User, 'externalUserId' | 'username' | 'imageUrl'>): Promise<void>;
 	deleteUser(payload: Pick<User, 'externalUserId'>): Promise<void>;
-	getRecommendedChannels(
-		externalUserId: User['externalUserId']
-	): Promise<Pick<User, 'id' | 'imageUrl' | 'username'>[]>;
+	getRecommendedUsers(): Promise<Pick<User, 'id' | 'imageUrl' | 'username'>[]>;
+	getUserByUsername(username: User['username']): Promise<User | null>;
 
 	// Follow
-	isFollowingUser(externalUserId: User['externalUserId'], channelId: string): Promise<boolean>;
+	isFollowingUser(username: User['username']): Promise<boolean>;
+	followUser(username: User['username']): Promise<void>;
+	unfollowUser(username: User['username']): Promise<void>;
 }

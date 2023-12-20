@@ -1,4 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
+
+import type { RepositoryService } from './lib/repository/repository-service';
+
 // for information about these interfaces
 declare global {
 	namespace App {
@@ -9,6 +12,7 @@ declare global {
 				| {
 						userId: `user_${string}`;
 				  };
+			repository: RepositoryService;
 		}
 		// interface PageData {}
 		// interface PageState {}

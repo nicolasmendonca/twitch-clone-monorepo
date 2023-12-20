@@ -10,8 +10,6 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
-	export let data: LayoutData;
-
 	onMount(() => {
 		const minWidth = Number(screens.lg.replace('px', ''));
 		const resizeObserver = new ResizeObserver(() => {
@@ -31,7 +29,7 @@
 		<Wrapper>
 			<Toggle />
 			<div class="space-y-4">
-				<Recommended {data} />
+				<Recommended />
 			</div>
 		</Wrapper>
 		<div
