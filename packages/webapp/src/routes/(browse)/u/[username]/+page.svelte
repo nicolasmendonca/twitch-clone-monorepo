@@ -1,4 +1,5 @@
 <script lang="ts">
+	import toast from 'svelte-french-toast';
 	import { enhance } from '$app/forms';
 	import * as Button from '$lib/components/ui/button';
 	import { Loader2 } from 'lucide-svelte';
@@ -14,7 +15,7 @@
 	{data.user?.id}
 	{isFollowingUser}
 
-	{#if data.user}
+	{#if data.user && data.user.id !== data.authUser.id}
 		<form
 			method="POST"
 			use:enhance={() => {
@@ -27,6 +28,7 @@
 						await update({
 							invalidateAll: false
 						});
+						toast.success(`Successfully ${isFollowingUser ? 'followed' : 'unfollowed'}`);
 					} else {
 						await update();
 					}

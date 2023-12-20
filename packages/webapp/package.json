@@ -43,6 +43,7 @@
 		"clerk-sveltekit": "^0.3.0",
 		"clsx": "^2.0.0",
 		"lucide-svelte": "^0.295.0",
+		"svelte-french-toast": "^1.2.0",
 		"svix": "^1.15.0",
 		"tailwind-merge": "^2.1.0",
 		"tailwind-variants": "^0.1.18"
