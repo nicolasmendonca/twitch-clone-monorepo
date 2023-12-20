@@ -5,6 +5,7 @@ export interface RepositoryService {
 	createUser(payload: Pick<User, 'externalUserId' | 'username' | 'imageUrl'>): Promise<void>;
 	updateUser(payload: Pick<User, 'externalUserId' | 'username' | 'imageUrl'>): Promise<void>;
 	deleteUser(payload: Pick<User, 'externalUserId'>): Promise<void>;
+	getAuthUser(): Promise<Pick<User, 'id' | 'imageUrl' | 'username'>>;
 	getRecommendedUsers(): Promise<Pick<User, 'id' | 'imageUrl' | 'username'>[]>;
 	getUserByUsername(username: User['username']): Promise<User | null>;
 
