@@ -9,6 +9,7 @@
 	import type { LayoutData } from './$types';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import Following from './sidebar/Following.svelte';
 
 	onMount(() => {
 		const minWidth = Number(screens.lg.replace('px', ''));
@@ -29,6 +30,7 @@
 		<Wrapper>
 			<Toggle />
 			<div class="space-y-4">
+				<Following />
 				<Recommended />
 			</div>
 		</Wrapper>

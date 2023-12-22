@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { route } from '$lib/ROUTES';
 </script>
 
-<a href="/" class="group transition-all">
+<a href={route('/browse')} class="group transition-all">
 	<div class="flex gap-4">
 		<div class="hidden md:block items-center gap-x-4 transition">
 			<img src="/spooky.svg" class="w-10 h-10 bg-white rounded-full" alt="" />

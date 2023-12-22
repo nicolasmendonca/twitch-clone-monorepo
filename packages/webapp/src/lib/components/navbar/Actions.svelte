@@ -16,7 +16,7 @@
 <SignedIn let:user>
 	<div class="flex items-center justify-center gap-x-2 ml-4 lg:ml-0">
 		<Button.Root
-			href={`/u/${user.id}`}
+			href={`/u/${user?.id}`}
 			class="flex items-center justify-center gap-2 text-muted-foreground group"
 			variant="ghost"
 		>
@@ -27,6 +27,6 @@
 			</div>
 			<div class="hidden lg:block">Dashboard</div>
 		</Button.Root>
-		<UserButton afterSignOutUrl={route('/')} />
+		<UserButton afterSignOutUrl={route('/login')} />
 	</div>
 </SignedIn>

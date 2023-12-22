@@ -9,22 +9,23 @@
 	import type { RepositoryService } from '$lib/repository/repository-service';
 	import LiveBadge from '$lib/components/LiveBadge.svelte';
 
-	let recommendedChannelsPromise: ReturnType<RepositoryService['getRecommendedUsers']> =
-		$page.data.recommendedChannels;
+	$: followedUsersPromise = $page.data.followedUsers as ReturnType<
+		RepositoryService['getRecommendedUsers']
+	>;
 </script>
 
 <div>
 	{#if $sidebarStore.expanded}
-		{#await recommendedChannelsPromise then channels}
+		{#await followedUsersPromise then channels}
 			{#if channels.length > 0}
 				<div class="pl-6 mb-4 hidden lg:block">
-					<p class="text-sm text-muted-foreground">Recommended</p>
+					<p class="text-sm text-muted-foreground">Following</p>
 				</div>
 			{/if}
 		{/await}
 	{/if}
 	<ul class="space-y-2 px-2">
-		{#await recommendedChannelsPromise}
+		{#await followedUsersPromise}
 			<!-- <Skeleton> Component -->
 			<div class="space-y-4 px-2">
 				{#each Array(4) as i}
@@ -34,14 +35,14 @@
 					</div>
 				{/each}
 			</div>
-		{:then recommendedChannels}
-			{#each recommendedChannels as channel (channel.id)}
+		{:then followedUsers}
+			{#each followedUsers as user (user.id)}
 				<!-- <UserItem> component -->
-				{@const isActive = $page.params.username === channel.username}
+				{@const isActive = $page.params.username === user.username}
 				{@const isLive = true}
 				<li>
 					<a
-						href={route('/u/[username]', { username: channel.username })}
+						href={route('/browse/u/[username]', { username: user.username })}
 						class={Button.buttonVariants({
 							variant: 'ghost',
 							className: cn('w-full h-12', {
@@ -56,9 +57,9 @@
 								'justify-center': !$sidebarStore.expanded
 							})}
 						>
-							<UserAvatar imageUrl={channel.imageUrl} {isLive} />
+							<UserAvatar imageUrl={user.imageUrl} {isLive} />
 							{#if $sidebarStore.expanded}
-								<p class="truncate">{channel.username}</p>
+								<p class="truncate">{user.username}</p>
 								{#if isLive}
 									<LiveBadge class="ml-auto" />
 								{/if}

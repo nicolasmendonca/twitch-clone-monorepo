@@ -91,15 +91,33 @@ export class PrismaRepository implements RepositoryService {
 	};
 
 	getRecommendedUsers: RepositoryService['getRecommendedUsers'] = async () => {
+		if (!this.externalUserId) throw new UserNotAuthenticatedError();
+
 		return this.prisma.user.findMany({
 			where: {
-				externalUserId: {
-					not: this.externalUserId
-				}
+				AND: [
+					{
+						NOT: {
+							externalUserId: this.externalUserId
+						}
+					},
+					{
+						NOT: {
+							followers: {
+								some: {
+									follower: {
+										externalUserId: this.externalUserId
+									}
+								}
+							}
+						}
+					}
+				]
 			},
 			orderBy: {
 				createdAt: 'desc'
-			}
+			},
+			take: 5
 		});
 	};
 
@@ -201,6 +219,44 @@ export class PrismaRepository implements RepositoryService {
 				throw new UserNotPreviouslyFollowedError();
 			}
 			throw e;
+		}
+	};
+
+	getFollowedUsers: RepositoryService['getFollowedUsers'] = async () => {
+		try {
+			if (!this.externalUserId) throw new UserNotAuthenticatedError();
+
+			const currentUser = await this.prisma.user.findUnique({
+				where: {
+					externalUserId: this.externalUserId
+				},
+				select: {
+					id: true
+				}
+			});
+
+			if (!currentUser) throw new UserDoesNotExistError();
+
+			const followConnections = await this.prisma.follow.findMany({
+				where: {
+					followerId: currentUser.id
+				},
+				select: {
+					following: {
+						select: {
+							id: true,
+							imageUrl: true,
+							username: true
+						}
+					}
+				},
+				take: 5
+			});
+
+			return followConnections.map((follow) => follow.following);
+		} catch (e) {
+			console.error(e);
+			return [];
 		}
 	};
 }

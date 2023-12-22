@@ -11,10 +11,10 @@
 const PAGES = {
   "/login": `/login`,
   "/register": `/register`,
-  "/": `/`,
-  "/search": `/search`,
-  "/u/[username]": (params: { username: (string | number) }) => {
-    return `/u/${params.username}`
+  "/browse": `/browse`,
+  "/browse/search": `/browse/search`,
+  "/browse/u/[username]": (params: { username: (string | number) }) => {
+    return `/browse/u/${params.username}`
   }
 }
 
@@ -29,11 +29,11 @@ const SERVERS = {
  * ACTIONS
  */
 const ACTIONS = {
-  "followUser /u/[username]": (params: { username: (string | number) }) => {
-    return `/u/${params.username}?/followUser`
+  "followUser /browse/u/[username]": (params: { username: (string | number) }) => {
+    return `/browse/u/${params.username}?/followUser`
   },
-  "unfollowUser /u/[username]": (params: { username: (string | number) }) => {
-    return `/u/${params.username}?/unfollowUser`
+  "unfollowUser /browse/u/[username]": (params: { username: (string | number) }) => {
+    return `/browse/u/${params.username}?/unfollowUser`
   }
 }
 
@@ -120,9 +120,9 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = { 
-  PAGES: { '/login': never, '/register': never, '/': never, '/search': never, '/u/[username]': 'username' }
+  PAGES: { '/login': never, '/register': never, '/browse': never, '/browse/search': never, '/browse/u/[username]': 'username' }
   SERVERS: { 'POST /api/webhooks/clerk': never }
-  ACTIONS: { 'followUser /u/[username]': 'username', 'unfollowUser /u/[username]': 'username' }
+  ACTIONS: { 'followUser /browse/u/[username]': 'username', 'unfollowUser /browse/u/[username]': 'username' }
   LINKS: Record<string, never>
   Params: { username: never }
 }

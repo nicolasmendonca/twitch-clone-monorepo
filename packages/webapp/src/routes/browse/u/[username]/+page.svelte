@@ -15,7 +15,7 @@
 	{data.user?.id}
 	{isFollowingUser}
 
-	{#if data.user && data.user.id !== data.authUser.id}
+	{#if data.user && data.user.id !== data.authUser?.id}
 		<form
 			method="POST"
 			use:enhance={() => {
@@ -25,9 +25,7 @@
 					if (result.type === 'success') {
 						// @ts-ignore-next-line
 						isFollowingUser = result.data.result.isFollowingUser;
-						await update({
-							invalidateAll: false
-						});
+						await update();
 						toast.success(`Successfully ${isFollowingUser ? 'followed' : 'unfollowed'}`);
 					} else {
 						await update();

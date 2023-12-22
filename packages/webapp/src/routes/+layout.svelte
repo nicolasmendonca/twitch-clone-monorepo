@@ -17,6 +17,7 @@
 
 <Toaster
 	toastOptions={{
-		className: cn('bg-background text-foreground')
+		className: cn('bg-background text-foreground'),
+		position: 'bottom-center'
 	}}
 />
