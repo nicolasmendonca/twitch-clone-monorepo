@@ -12,8 +12,14 @@ export const handle: Handle = sequence(
 		protectedPaths: [route('/browse')],
 		signInUrl: '/login'
 	}),
-	({ event, resolve }) => {
-		event.locals.repository = new PrismaRepository(event.locals.session?.userId);
+	async ({ event, resolve }) => {
+		const repository = new PrismaRepository();
+		if (event.locals.session?.userId) {
+			const authUser = await repository.getUserByExternalId(event.locals.session?.userId);
+			repository.setAuthUser(authUser);
+			event.locals.authUser = authUser;
+		}
+		event.locals.repository = repository;
 
 		return resolve(event);
 	}

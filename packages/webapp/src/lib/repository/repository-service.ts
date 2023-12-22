@@ -7,7 +7,7 @@ export interface RepositoryService {
 	createUser(payload: Pick<User, 'externalUserId' | 'username' | 'imageUrl'>): Promise<void>;
 	updateUser(payload: Pick<User, 'externalUserId' | 'username' | 'imageUrl'>): Promise<void>;
 	deleteUser(payload: Pick<User, 'externalUserId'>): Promise<void>;
-	getAuthUser(): Promise<PublicUserData>;
+	getUserByExternalId(externalUserId: User['externalUserId']): Promise<User>;
 	getRecommendedUsers(): Promise<PublicUserData[]>;
 	getUserByUsername(username: User['username']): Promise<User | null>;
 
@@ -16,4 +16,8 @@ export interface RepositoryService {
 	followUser(username: User['username']): Promise<void>;
 	unfollowUser(username: User['username']): Promise<void>;
 	getFollowedUsers(): Promise<PublicUserData[]>;
+
+	// Block
+	isBlockedByUser(username: User['username']): Promise<boolean>;
+	blockUser(username: User['username']): Promise<void>;
 }

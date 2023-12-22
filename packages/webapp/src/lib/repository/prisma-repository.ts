@@ -5,19 +5,22 @@ import type { User } from './types';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import {
 	CannotFollowSelfError,
+	UserAlreadyBlockedError,
 	UserAlreadyFollowedError,
-	UserDoesNotExistError,
 	UserNotAuthenticatedError,
 	UserNotPreviouslyFollowedError
 } from './errors';
 
 export class PrismaRepository implements RepositoryService {
 	private readonly prisma: PrismaClient;
-	private readonly externalUserId: User['externalUserId'] | undefined;
+	private authUser: User | undefined;
 
-	constructor(externalUserId: User['externalUserId'] | undefined) {
+	constructor() {
 		this.prisma = prisma;
-		this.externalUserId = externalUserId;
+	}
+
+	public setAuthUser(authUser: User) {
+		this.authUser = authUser;
 	}
 
 	// User --------------------------------------------------
@@ -71,19 +74,14 @@ export class PrismaRepository implements RepositoryService {
 		});
 	};
 
-	getAuthUser: RepositoryService['getAuthUser'] = async () => {
+	getUserByExternalId: RepositoryService['getUserByExternalId'] = async (externalUserId) => {
 		const user = await this.prisma.user.findUnique({
 			where: {
-				externalUserId: this.externalUserId
-			},
-			select: {
-				id: true,
-				imageUrl: true,
-				username: true
+				externalUserId
 			}
 		});
 
-		if (!user || !this.externalUserId) {
+		if (!user || !externalUserId) {
 			throw new UserNotAuthenticatedError();
 		}
 
@@ -91,22 +89,24 @@ export class PrismaRepository implements RepositoryService {
 	};
 
 	getRecommendedUsers: RepositoryService['getRecommendedUsers'] = async () => {
-		if (!this.externalUserId) throw new UserNotAuthenticatedError();
+		if (!this.authUser) throw new UserNotAuthenticatedError();
 
 		return this.prisma.user.findMany({
 			where: {
 				AND: [
 					{
+						// Exclude self
 						NOT: {
-							externalUserId: this.externalUserId
+							id: this.authUser.id
 						}
 					},
 					{
+						// Exclude users already followed
 						NOT: {
 							followers: {
 								some: {
 									follower: {
-										externalUserId: this.externalUserId
+										id: this.authUser.id
 									}
 								}
 							}
@@ -130,14 +130,12 @@ export class PrismaRepository implements RepositoryService {
 	};
 
 	// Follow ------------------------------------------------
-	isFollowingUser: RepositoryService['isFollowingUser'] = async (username: User['username']) => {
-		if (!this.externalUserId) throw new UserNotAuthenticatedError();
+	isFollowingUser: RepositoryService['isFollowingUser'] = async (username) => {
+		if (!this.authUser) throw new UserNotAuthenticatedError();
 
 		const currentUser = await this.prisma.follow.findFirst({
 			where: {
-				follower: {
-					externalUserId: this.externalUserId
-				},
+				followerId: this.authUser.id,
 				following: {
 					username
 				}
@@ -147,26 +145,17 @@ export class PrismaRepository implements RepositoryService {
 		return !!currentUser;
 	};
 
-	followUser: RepositoryService['followUser'] = async (username: User['username']) => {
+	followUser: RepositoryService['followUser'] = async (username) => {
+		if (!this.authUser) throw new UserNotAuthenticatedError();
+
+		if (this.authUser.username === username) throw new CannotFollowSelfError();
+
 		try {
-			const user = await this.prisma.user.findUnique({
-				where: {
-					username
-				},
-				select: {
-					id: true,
-					externalUserId: true
-				}
-			});
-
-			if (!user) throw new UserDoesNotExistError();
-			if (user.externalUserId === this.externalUserId) throw new CannotFollowSelfError();
-
 			await this.prisma.follow.create({
 				data: {
 					follower: {
 						connect: {
-							externalUserId: this.externalUserId
+							id: this.authUser.id
 						}
 					},
 					following: {
@@ -178,68 +167,40 @@ export class PrismaRepository implements RepositoryService {
 			});
 		} catch (e) {
 			if (e instanceof PrismaClientKnownRequestError) {
-				console.error(e);
 				throw new UserAlreadyFollowedError();
-			} else {
-				throw e;
-			}
-		}
-	};
-
-	unfollowUser: RepositoryService['unfollowUser'] = async (username: User['username']) => {
-		try {
-			if (!this.externalUserId) throw new UserNotAuthenticatedError();
-			const [currentUser, followed] = await Promise.all([
-				this.prisma.user.findUnique({
-					where: {
-						externalUserId: this.externalUserId
-					}
-				}),
-				this.prisma.user.findUnique({
-					where: {
-						username
-					}
-				})
-			]);
-
-			if (!currentUser || !followed) throw new UserDoesNotExistError();
-			if (currentUser.id === followed.id) throw new CannotFollowSelfError();
-
-			await this.prisma.follow.delete({
-				where: {
-					followerId_followingId: {
-						followerId: currentUser?.id,
-						followingId: followed?.id
-					}
-				}
-			});
-		} catch (e) {
-			if (e instanceof PrismaClientKnownRequestError) {
-				console.error(e);
-				throw new UserNotPreviouslyFollowedError();
 			}
 			throw e;
 		}
 	};
 
+	unfollowUser: RepositoryService['unfollowUser'] = async (username) => {
+		if (!this.authUser) throw new UserNotAuthenticatedError();
+
+		const existingFollow = await this.prisma.follow.findFirst({
+			where: {
+				followerId: this.authUser.id,
+				following: {
+					username
+				}
+			}
+		});
+
+		if (!existingFollow) throw new UserNotPreviouslyFollowedError();
+
+		await this.prisma.follow.delete({
+			where: {
+				id: existingFollow.id
+			}
+		});
+	};
+
 	getFollowedUsers: RepositoryService['getFollowedUsers'] = async () => {
 		try {
-			if (!this.externalUserId) throw new UserNotAuthenticatedError();
-
-			const currentUser = await this.prisma.user.findUnique({
-				where: {
-					externalUserId: this.externalUserId
-				},
-				select: {
-					id: true
-				}
-			});
-
-			if (!currentUser) throw new UserDoesNotExistError();
+			if (!this.authUser) throw new UserNotAuthenticatedError();
 
 			const followConnections = await this.prisma.follow.findMany({
 				where: {
-					followerId: currentUser.id
+					followerId: this.authUser.id
 				},
 				select: {
 					following: {
@@ -257,6 +218,47 @@ export class PrismaRepository implements RepositoryService {
 		} catch (e) {
 			console.error(e);
 			return [];
+		}
+	};
+
+	// Block
+	isBlockedByUser: RepositoryService['isBlockedByUser'] = async (username) => {
+		if (!this.authUser) throw new UserNotAuthenticatedError();
+
+		const existingBlock = await this.prisma.block.findFirst({
+			where: {
+				blocked: {
+					username
+				},
+				blockerId: this.authUser.id
+			}
+		});
+
+		return !!existingBlock;
+	};
+
+	blockUser: RepositoryService['blockUser'] = async (username) => {
+		if (!this.authUser) throw new UserNotAuthenticatedError();
+		try {
+			await this.prisma.block.create({
+				data: {
+					blocked: {
+						connect: {
+							username
+						}
+					},
+					blocker: {
+						connect: {
+							id: this.authUser.id
+						}
+					}
+				}
+			});
+		} catch (e) {
+			if (e instanceof PrismaClientKnownRequestError) {
+				throw new UserAlreadyBlockedError();
+			}
+			throw e;
 		}
 	};
 }

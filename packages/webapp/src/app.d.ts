@@ -12,6 +12,7 @@ declare global {
 				| {
 						userId: `user_${string}`;
 				  };
+			authUser: User | undefined;
 			repository: RepositoryService;
 		}
 		// interface PageData {}

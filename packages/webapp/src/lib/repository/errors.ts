@@ -4,6 +4,12 @@ export class UserAlreadyFollowedError extends Error {
 		this.message = 'User already followed';
 	}
 }
+export class UserAlreadyBlockedError extends Error {
+	constructor() {
+		super();
+		this.message = 'User already blocked';
+	}
+}
 export class UserNotPreviouslyFollowedError extends Error {
 	constructor() {
 		super();

@@ -14,12 +14,8 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		? locals.repository.getFollowedUsers()
 		: Promise.resolve([]);
 
-	const authUserPromise = locals.session?.userId
-		? locals.repository.getAuthUser()
-		: Promise.resolve(undefined);
-
 	return {
-		authUser: await authUserPromise,
+		authUser: locals.authUser,
 		followedUsers,
 		recommendedChannels
 	};
