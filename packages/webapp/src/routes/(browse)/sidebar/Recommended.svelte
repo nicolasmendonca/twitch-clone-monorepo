@@ -9,23 +9,23 @@
 	import type { RepositoryService } from '$lib/repository/repository-service';
 	import LiveBadge from '$lib/components/LiveBadge.svelte';
 
-	$: followedUsersPromise = $page.data.followedUsers as ReturnType<
+	$: recommendedChannelsPromise = $page.data.recommendedChannels as ReturnType<
 		RepositoryService['getRecommendedUsers']
 	>;
 </script>
 
 <div>
 	{#if $sidebarStore.expanded}
-		{#await followedUsersPromise then channels}
+		{#await recommendedChannelsPromise then channels}
 			{#if channels.length > 0}
 				<div class="pl-6 mb-4 hidden lg:block">
-					<p class="text-sm text-muted-foreground">Following</p>
+					<p class="text-sm text-muted-foreground">Recommended</p>
 				</div>
 			{/if}
 		{/await}
 	{/if}
 	<ul class="space-y-2 px-2">
-		{#await followedUsersPromise}
+		{#await recommendedChannelsPromise}
 			<!-- <Skeleton> Component -->
 			<div class="space-y-4 px-2">
 				{#each Array(4) as i}
@@ -35,14 +35,14 @@
 					</div>
 				{/each}
 			</div>
-		{:then followedUsers}
-			{#each followedUsers as user (user.id)}
+		{:then recommendedChannels}
+			{#each recommendedChannels as channel (channel.id)}
 				<!-- <UserItem> component -->
-				{@const isActive = $page.params.username === user.username}
+				{@const isActive = $page.params.username === channel.username}
 				{@const isLive = true}
 				<li>
 					<a
-						href={route('/browse/u/[username]', { username: user.username })}
+						href={route('/u/[username]', { username: channel.username })}
 						class={Button.buttonVariants({
 							variant: 'ghost',
 							className: cn('w-full h-12', {
@@ -57,9 +57,9 @@
 								'justify-center': !$sidebarStore.expanded
 							})}
 						>
-							<UserAvatar imageUrl={user.imageUrl} {isLive} />
+							<UserAvatar imageUrl={channel.imageUrl} {isLive} />
 							{#if $sidebarStore.expanded}
-								<p class="truncate">{user.username}</p>
+								<p class="truncate">{channel.username}</p>
 								{#if isLive}
 									<LiveBadge class="ml-auto" />
 								{/if}

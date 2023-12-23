@@ -9,7 +9,7 @@
 <div class="flex flex-col gap-8 items-center min-h-screen py-24 bg-background">
 	<img src="/spooky.svg" alt="" class="w-48 h-48 bg-white rounded-full fill-black" />
 	<SignIn
-		redirectUrl={route('/browse')}
+		redirectUrl={route('/')}
 		appearance={{
 			baseTheme: dark
 		}}
@@ -17,5 +17,5 @@
 </div>
 
 <SignedIn>
-	{goto(route('/browse'))}
+	{goto(route('/'))}
 </SignedIn>

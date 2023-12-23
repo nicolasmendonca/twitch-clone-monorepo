@@ -7,8 +7,8 @@ import { PUBLIC_CLERK_PUBLISHABLE_KEY } from '$env/static/public';
 import { route } from './lib/ROUTES';
 
 initializeClerkClient(PUBLIC_CLERK_PUBLISHABLE_KEY, {
-	afterSignInUrl: route('/browse'),
-	afterSignUpUrl: route('/browse'),
+	afterSignInUrl: route('/'),
+	afterSignUpUrl: route('/'),
 	signInUrl: route('/login'),
 	signUpUrl: route('/register')
 });
