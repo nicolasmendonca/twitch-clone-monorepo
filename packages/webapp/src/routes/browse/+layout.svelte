@@ -6,7 +6,6 @@
 	import Toggle from './sidebar/Toggle.svelte';
 	import Wrapper from './sidebar/Wrapper.svelte';
 	import { cn } from '$lib/utils';
-	import type { LayoutData } from './$types';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import Following from './sidebar/Following.svelte';

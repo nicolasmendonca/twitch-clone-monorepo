@@ -34,6 +34,12 @@ const ACTIONS = {
   },
   "unfollowUser /browse/u/[username]": (params: { username: (string | number) }) => {
     return `/browse/u/${params.username}?/unfollowUser`
+  },
+  "blockUser /browse/u/[username]": (params: { username: (string | number) }) => {
+    return `/browse/u/${params.username}?/blockUser`
+  },
+  "unblockUser /browse/u/[username]": (params: { username: (string | number) }) => {
+    return `/browse/u/${params.username}?/unblockUser`
   }
 }
 
@@ -122,7 +128,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 export type KIT_ROUTES = { 
   PAGES: { '/login': never, '/register': never, '/browse': never, '/browse/search': never, '/browse/u/[username]': 'username' }
   SERVERS: { 'POST /api/webhooks/clerk': never }
-  ACTIONS: { 'followUser /browse/u/[username]': 'username', 'unfollowUser /browse/u/[username]': 'username' }
+  ACTIONS: { 'followUser /browse/u/[username]': 'username', 'unfollowUser /browse/u/[username]': 'username', 'blockUser /browse/u/[username]': 'username', 'unblockUser /browse/u/[username]': 'username' }
   LINKS: Record<string, never>
   Params: { username: never }
 }

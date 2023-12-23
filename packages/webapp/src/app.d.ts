@@ -1,6 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { RepositoryService } from './lib/repository/repository-service';
+import type { User } from '$lib/repository/types';
+import type { RepositoryService } from '$lib/repository/repository-service';
 
 // for information about these interfaces
 declare global {

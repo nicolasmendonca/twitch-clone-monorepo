@@ -18,6 +18,7 @@ export interface RepositoryService {
 	getFollowedUsers(): Promise<PublicUserData[]>;
 
 	// Block
-	isBlockedByUser(username: User['username']): Promise<boolean>;
+	isBlockingUser(username: User['username']): Promise<boolean>;
 	blockUser(username: User['username']): Promise<void>;
+	unblockUser(username: User['username']): Promise<void>;
 }
