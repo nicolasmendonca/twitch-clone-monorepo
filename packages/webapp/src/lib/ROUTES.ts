@@ -15,6 +15,9 @@ const PAGES = {
   "/search": `/search`,
   "/u/[username]": (params: { username: (string | number) }) => {
     return `/u/${params.username}`
+  },
+  "/dashboard/u/[username]": (params: { username: (string | number) }) => {
+    return `/dashboard/u/${params.username}`
   }
 }
 
@@ -126,7 +129,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = { 
-  PAGES: { '/login': never, '/register': never, '/': never, '/search': never, '/u/[username]': 'username' }
+  PAGES: { '/login': never, '/register': never, '/': never, '/search': never, '/u/[username]': 'username', '/dashboard/u/[username]': 'username' }
   SERVERS: { 'POST /api/webhooks/clerk': never }
   ACTIONS: { 'followUser /u/[username]': 'username', 'unfollowUser /u/[username]': 'username', 'blockUser /u/[username]': 'username', 'unblockUser /u/[username]': 'username' }
   LINKS: Record<string, never>

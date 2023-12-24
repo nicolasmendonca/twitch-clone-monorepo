@@ -12,7 +12,7 @@ import { route } from '$lib/ROUTES';
 export const handle: Handle = sequence(
 	await handleClerk(CLERK_SECRET_KEY, {
 		debug: NODE_ENV === 'development',
-		protectedPaths: [],
+		protectedPaths: ['/dashboard'],
 		signInUrl: route('/login')
 	}),
 	async ({ event, resolve }) => {
