@@ -84,7 +84,12 @@ export class UnauthenticatedPrismaRepository implements RepositoryService {
 	};
 
 	getRecommendedUsers: RepositoryService['getRecommendedUsers'] = async () => {
-		throw new UserNotAuthenticatedError();
+		return this.prisma.user.findMany({
+			orderBy: {
+				createdAt: 'desc'
+			},
+			take: 5
+		});
 	};
 
 	getUserByUsername: RepositoryService['getUserByUsername'] = async (username) => {
@@ -109,7 +114,7 @@ export class UnauthenticatedPrismaRepository implements RepositoryService {
 	};
 
 	getFollowedUsers: RepositoryService['getFollowedUsers'] = async () => {
-		throw new UserNotAuthenticatedError();
+		return [];
 	};
 
 	// Block -------------------------------------------------
