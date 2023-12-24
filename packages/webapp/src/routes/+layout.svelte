@@ -3,6 +3,8 @@
 	import { Toaster } from 'svelte-french-toast';
 	import { cn } from '$lib/utils';
 	import { invalidateAll } from '$app/navigation';
+	import ClerkLoading from 'clerk-sveltekit/client/ClerkLoading.svelte';
+	import ClerkLoaded from 'clerk-sveltekit/client/ClerkLoaded.svelte';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
