@@ -1,4 +1,4 @@
-import { env } from '$env/dynamic/private';
+import { NODE_ENV } from '$env/static/private';
 import pkg, { PrismaClient } from '@prisma/client';
 
 declare global {
@@ -6,7 +6,7 @@ declare global {
 }
 
 let prisma: PrismaClient;
-if (env.NODE_ENV === 'development') {
+if (NODE_ENV === 'development') {
 	if (!globalThis._prisma) {
 		globalThis._prisma = new PrismaClient();
 	}
