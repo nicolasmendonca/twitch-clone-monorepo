@@ -19,14 +19,18 @@
 	});
 </script>
 
-<ClerkLoading>
-	<div class="w-screen h-screen flex flex-col items-center justify-center">
-		<img src="/spooky.svg" alt="" class="w-48 h-48 bg-white rounded-full animate-pulse" />
-	</div>
-</ClerkLoading>
-<ClerkLoaded let:clerk>
-	<slot />
-</ClerkLoaded>
+{#await import('clerk-sveltekit/client/ClerkLoading.svelte') then ClerkLoading}
+	<ClerkLoading.default>
+		<div class="w-screen h-screen flex flex-col items-center justify-center">
+			<img src="/spooky.svg" alt="" class="w-48 h-48 bg-white rounded-full animate-pulse" />
+		</div>
+	</ClerkLoading.default>
+{/await}
+{#await import('clerk-sveltekit/client/ClerkLoaded.svelte') then ClerkLoaded}
+	<ClerkLoaded.default>
+		<slot />
+	</ClerkLoaded.default>
+{/await}
 
 <Toaster
 	toastOptions={{
