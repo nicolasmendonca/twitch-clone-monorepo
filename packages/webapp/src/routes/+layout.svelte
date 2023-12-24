@@ -2,8 +2,21 @@
 	import '../app.pcss';
 	import { Toaster } from 'svelte-french-toast';
 	import { cn } from '$lib/utils';
-	import ClerkLoading from 'clerk-sveltekit/client/ClerkLoading.svelte';
-	import ClerkLoaded from 'clerk-sveltekit/client/ClerkLoaded.svelte';
+	import { invalidateAll } from '$app/navigation';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		const eventName = 'clerk-sveltekit:user' as const;
+		const callback = () => {
+			console.log('ℹ️ received clerk session - calling `invalidateAll`');
+			invalidateAll();
+		};
+		document.addEventListener(eventName, callback);
+
+		return () => {
+			document.removeEventListener(eventName, callback);
+		};
+	});
 </script>
 
 <ClerkLoading>
