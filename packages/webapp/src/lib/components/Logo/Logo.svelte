@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
+	export let label: string;
 </script>
 
 <a href={route('/')} class="group transition-all">
@@ -9,7 +10,7 @@
 		</div>
 		<div class="group-hover:text-purple-100">
 			<p class="text-lg font-semibold">Gamehub</p>
-			<p class="text-xs text-muted-foreground">{"Let's play"}</p>
+			<p class="text-xs text-muted-foreground">{label}</p>
 		</div>
 	</div>
 </a>

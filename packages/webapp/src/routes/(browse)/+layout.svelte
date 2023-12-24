@@ -2,13 +2,10 @@
 	import { screens } from 'tailwindcss/defaultTheme';
 	import { Navbar } from '$lib/components/navbar';
 	import { automaticallyChangeSidebar, sidebarStore } from '$lib/stores/sidebar';
-	import Recommended from './sidebar/Recommended.svelte';
-	import Toggle from './sidebar/Toggle.svelte';
-	import Wrapper from './sidebar/Wrapper.svelte';
 	import { cn } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
-	import Following from './sidebar/Following.svelte';
+	import { Sidebar } from './sidebar';
 
 	onMount(() => {
 		const minWidth = Number(screens.lg.replace('px', ''));
@@ -26,13 +23,7 @@
 <div class="h-full">
 	<Navbar />
 	<div class="flex h-full">
-		<Wrapper>
-			<Toggle />
-			<div class="space-y-4">
-				<Following />
-				<Recommended />
-			</div>
-		</Wrapper>
+		<Sidebar />
 		<div
 			class={cn('w-full mt-20', {
 				'ml-[70px] lg:ml-60': !browser,
