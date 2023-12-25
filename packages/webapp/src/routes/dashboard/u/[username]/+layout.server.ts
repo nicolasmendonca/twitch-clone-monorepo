@@ -7,4 +7,8 @@ export const load: LayoutServerLoad = async ({ params, locals }) => {
 			message: 'Forbidden'
 		});
 	}
+
+	return {
+		authUser: locals.authUser
+	};
 };

@@ -1,1 +1,1 @@
-<p>Dashboard</p>
+<p>Creator Dashboard</p>

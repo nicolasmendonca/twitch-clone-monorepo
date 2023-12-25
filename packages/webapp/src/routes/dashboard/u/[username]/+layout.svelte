@@ -24,7 +24,7 @@
 <div class="flex h-full pt-20">
 	<Sidebar />
 	<div
-		class={cn('w-full mt-20', {
+		class={cn('w-full', {
 			'ml-[70px] lg:ml-60': !browser,
 			'lg:ml-60': $creatorSidebarStore.expanded,
 			'ml-[70px]': !$creatorSidebarStore.expanded
