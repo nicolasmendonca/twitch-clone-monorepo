@@ -7,7 +7,7 @@
 <div class="flex flex-col gap-8 items-center min-h-screen py-24 bg-background">
 	<img src="/spooky.svg" alt="" class="w-48 h-48 bg-white rounded-full fill-black" />
 	<SignUp
-		redirectUrl={route('/')}
+		redirectUrl={route('/postregister')}
 		appearance={{
 			baseTheme: dark
 		}}

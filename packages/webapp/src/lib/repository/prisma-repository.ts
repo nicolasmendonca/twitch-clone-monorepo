@@ -24,7 +24,12 @@ export class UnauthenticatedPrismaRepository implements RepositoryService {
 			data: {
 				externalUserId: payload.externalUserId,
 				username: payload.username,
-				imageUrl: payload.imageUrl
+				imageUrl: payload.imageUrl,
+				stream: {
+					create: {
+						name: `${payload.username}'s stream`
+					}
+				}
 			}
 		});
 	};

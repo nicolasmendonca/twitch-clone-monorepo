@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -20,11 +21,38 @@ model User {
   following Follow[] @relation(name: "Following")
   followers Follow[] @relation(name: "FollowedBy")
 
-  blocking Block[] @relation(name: "Blocking")
+  blocking  Block[] @relation(name: "Blocking")
   blockedBy Block[] @relation(name: "Blocked")
+
+  stream Stream?
 
   @@index([externalUserId])
   @@index([username])
+}
+
+model Stream {
+  id           String  @id @default(uuid())
+  name         String  @db.Text
+  thumbnailUrl String? @db.Text
+
+  ingressId String? @unique
+  serverUrl String? @db.Text
+  streamKey String? @db.Text
+
+  isLive               Boolean @default(false)
+  isChatEnabled        Boolean @default(true)
+  isChatDelayed        Boolean @default(false)
+  isChartFollowersOnly Boolean @default(false)
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([ingressId])
+  @@fulltext([name])
 }
 
 model Follow {
@@ -44,9 +72,9 @@ model Follow {
 }
 
 model Block {
-  id         String @id @default(uuid())
-  blockerId  String
-  blockedId  String
+  id        String @id @default(uuid())
+  blockerId String
+  blockedId String
 
   blocker User @relation(name: "Blocking", fields: [blockerId], references: [id], onDelete: Cascade)
   blocked User @relation(name: "Blocked", fields: [blockedId], references: [id], onDelete: Cascade)

@@ -18,9 +18,14 @@ export const handle: Handle = sequence(
 	async ({ event, resolve }) => {
 		let repository = new UnauthenticatedPrismaRepository();
 		if (event.locals.session?.userId) {
-			const authUser = await repository.getUserByExternalId(event.locals.session?.userId);
-			repository = new AuthenticatedPrismaRepository(authUser);
-			event.locals.authUser = authUser;
+			try {
+				const authUser = await repository.getUserByExternalId(event.locals.session?.userId);
+				repository = new AuthenticatedPrismaRepository(authUser);
+				event.locals.authUser = authUser;
+			} catch (e) {
+				// Maybe the webhook has not been fired yet
+				console.error(e);
+			}
 		}
 		event.locals.repository = repository;
 
