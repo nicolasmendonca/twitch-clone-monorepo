@@ -1,4 +1,4 @@
-import type { User } from './types';
+import type { User, Stream } from './types';
 
 type PublicUserData = Pick<User, 'id' | 'imageUrl' | 'username'>;
 
@@ -21,4 +21,7 @@ export interface RepositoryService {
 	isBlockingUser(username: User['username']): Promise<boolean>;
 	blockUser(username: User['username']): Promise<void>;
 	unblockUser(username: User['username']): Promise<void>;
+
+	// Stream
+	getStreamByUsername(username: User['username']): Promise<Stream>;
 }

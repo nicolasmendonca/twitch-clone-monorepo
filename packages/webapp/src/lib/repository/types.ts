@@ -1,1 +1,1 @@
-export type { User } from '@prisma/client';
+export type { User, Stream } from '@prisma/client';

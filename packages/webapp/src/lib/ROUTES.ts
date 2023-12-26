@@ -19,6 +19,9 @@ const PAGES = {
   },
   "/dashboard/u/[username]": (params: { username: (string | number) }) => {
     return `/dashboard/u/${params.username}`
+  },
+  "/dashboard/u/[username]/chat": (params: { username: (string | number) }) => {
+    return `/dashboard/u/${params.username}/chat`
   }
 }
 
@@ -44,6 +47,9 @@ const ACTIONS = {
   },
   "unblockUser /u/[username]": (params: { username: (string | number) }) => {
     return `/u/${params.username}?/unblockUser`
+  },
+  "changeChatValue /dashboard/u/[username]/chat": (params: { username: (string | number) }) => {
+    return `/dashboard/u/${params.username}/chat?/changeChatValue`
   }
 }
 
@@ -130,9 +136,9 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = { 
-  PAGES: { '/login': never, '/postregister': never, '/register': never, '/': never, '/search': never, '/u/[username]': 'username', '/dashboard/u/[username]': 'username' }
+  PAGES: { '/login': never, '/postregister': never, '/register': never, '/': never, '/search': never, '/u/[username]': 'username', '/dashboard/u/[username]': 'username', '/dashboard/u/[username]/chat': 'username' }
   SERVERS: { 'POST /api/webhooks/clerk': never }
-  ACTIONS: { 'followUser /u/[username]': 'username', 'unfollowUser /u/[username]': 'username', 'blockUser /u/[username]': 'username', 'unblockUser /u/[username]': 'username' }
+  ACTIONS: { 'followUser /u/[username]': 'username', 'unfollowUser /u/[username]': 'username', 'blockUser /u/[username]': 'username', 'unblockUser /u/[username]': 'username', 'changeChatValue /dashboard/u/[username]/chat': 'username' }
   LINKS: Record<string, never>
   Params: { username: never }
 }

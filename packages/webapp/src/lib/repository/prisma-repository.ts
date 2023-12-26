@@ -5,6 +5,7 @@ import type { User } from './types';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import {
 	CannotFollowSelfError,
+	StreamNotFoundError,
 	UserAlreadyBlockedError,
 	UserAlreadyFollowedError,
 	UserNotAuthenticatedError,
@@ -133,6 +134,23 @@ export class UnauthenticatedPrismaRepository implements RepositoryService {
 
 	unblockUser: RepositoryService['blockUser'] = async () => {
 		throw new UserNotAuthenticatedError();
+	};
+
+	// Stream ------------------------------------------------
+	getStreamByUsername: RepositoryService['getStreamByUsername'] = async (username) => {
+		const stream = await this.prisma.stream.findFirst({
+			where: {
+				user: {
+					username
+				}
+			}
+		});
+
+		if (!stream) {
+			throw new StreamNotFoundError();
+		}
+
+		return stream;
 	};
 }
 

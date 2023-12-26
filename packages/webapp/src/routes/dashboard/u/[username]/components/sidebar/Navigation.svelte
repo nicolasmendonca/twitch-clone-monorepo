@@ -10,9 +10,6 @@
 
 	$: authUser = $page.data.authUser as User;
 	$: routeParams = { username: authUser.username };
-	$: {
-		console.log({ routeParams });
-	}
 	$: routes = [
 		{
 			label: 'Stream',

@@ -34,3 +34,9 @@ export class CannotFollowSelfError extends Error {
 		this.message = 'Cannot follow self';
 	}
 }
+export class StreamNotFoundError extends Error {
+	constructor() {
+		super();
+		this.message = 'Stream not found';
+	}
+}
